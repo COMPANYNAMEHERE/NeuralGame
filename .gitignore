@@ -1,0 +1,72 @@
+# Python cache files
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+*.py[cod]
+*$py.class
+
+# Directories to ignore
+models/
+logs/
+build/
+dist/
+.vs/
+.idea/
+.vscode/
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Project specific files
+*.pth
+*.pyc
+*.pyo
+*.log
+settings.json
+NeuralGame.rar
+
+# Temporary files
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Debug files
+*.debug
+*.log
+*.coverage
+.coverage
+htmlcov/
+
+# Development tools
+*.sublime-project
+*.sublime-workspace
+.python-version
+.env
+.env.*
+
+# Package files
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+bin/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Visual Studio Code specific files
+.vscode/
+*.code-workspace
+.history/
