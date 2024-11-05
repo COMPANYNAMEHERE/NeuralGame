@@ -1,29 +1,31 @@
+# src/gui/gui.py
+
 import pygame
 from gui.settings_menu import SettingsMenu
 
 class GUI:
-    def __init__(self, settings):
+    def __init__(self, settings, screen):
+        """
+        Initialize the GUI with settings and the Pygame screen.
+
+        :param settings: Instance of the Settings class.
+        :param screen: The Pygame screen surface.
+        """
         self.settings = settings
+        self.screen = screen
         self.screen_width = settings.get('screen_width')
         self.screen_height = settings.get('screen_height')
         self.pause_requested = None
         self.stop_requested = False
         self.load_requested = False
         self.interacting = False
-
         
         # Initialize constants and scaling factors
         self.init_dimensions()
         
-        # Initialize state
-        self.pause_requested = None
-        self.stop_requested = False
-        self.load_requested = False
-        self.interacting = False
-        
         # Initialize UI elements
         self.font = pygame.font.SysFont(None, self.font_size)
-        self.settings_menu = SettingsMenu(settings)
+        self.settings_menu = SettingsMenu(settings, screen)  # Pass screen to SettingsMenu
         self.buttons = []
         self.create_buttons()
         
@@ -38,7 +40,7 @@ class GUI:
         }
 
     def init_dimensions(self):
-        """Initialize responsive dimensions based on screen size"""
+        """Initialize responsive dimensions based on screen size."""
         base_size = min(self.screen_width, self.screen_height)
         self.margin = max(int(base_size * 0.02), 10)
         self.button_width = min(max(int(self.screen_width * 0.1), 100), 120)
@@ -48,7 +50,7 @@ class GUI:
         self.corner_radius = 6
 
     def create_buttons(self):
-        """Create button configurations with improved layout"""
+        """Create button configurations with improved layout."""
         button_configs = [
             {
                 "text": "Start",
@@ -97,16 +99,29 @@ class GUI:
             button_y += self.button_spacing
 
     def resize(self, screen_width, screen_height):
-        """Handle window resize events"""
+        """
+        Handle window resize events.
+
+        :param screen_width: New width of the screen.
+        :param screen_height: New height of the screen.
+        """
         self.screen_width = screen_width
         self.screen_height = screen_height
+        self.screen = pygame.display.set_mode(
+            (screen_width, screen_height),
+            pygame.RESIZABLE
+        )
         self.init_dimensions()
         self.font = pygame.font.SysFont(None, self.font_size)
         self.create_buttons()
         self.settings_menu.resize(screen_width, screen_height)
 
     def draw(self, screen):
-        """Draw GUI elements with improved visual styling"""
+        """
+        Draw GUI elements with improved visual styling.
+
+        :param screen: The Pygame screen surface.
+        """
         mouse_pos = pygame.mouse.get_pos()
         
         # Draw buttons
@@ -157,7 +172,12 @@ class GUI:
             self.settings_menu.draw(screen)
 
     def handle_event(self, event):
-        """Handle input events"""
+        """
+        Handle input events.
+
+        :param event: The Pygame event to handle.
+        :return: True if the event was handled by the GUI, False otherwise.
+        """
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = event.pos
             
@@ -176,38 +196,46 @@ class GUI:
         return False
 
     def update(self, time_delta):
-        """Update GUI state"""
+        """
+        Update GUI state.
+
+        :param time_delta: Time elapsed since the last frame.
+        """
         if self.settings_menu.visible:
             self.settings_menu.update()
 
     def is_interacting(self):
-        """Check if GUI is being interacted with"""
+        """
+        Check if GUI is being interacted with.
+
+        :return: True if interacting with GUI, False otherwise.
+        """
         return self.interacting or self.settings_menu.visible
 
     # Button action methods
     def start_simulation(self):
+        """Start the simulation."""
         self.settings.set('running', True)
         self.pause_requested = False
         self.interacting = False
 
     def pause_simulation(self):
+        """Toggle pause/resume of the simulation."""
         if self.settings.get('running'):
             self.pause_requested = not self.pause_requested
         self.interacting = False
 
     def stop_simulation(self):
+        """Stop and reset the simulation."""
         self.stop_requested = True
         self.interacting = False
 
     def load_generation(self):
+        """Request to load a saved generation."""
         self.load_requested = True
         self.interacting = False
 
     def toggle_settings(self):
+        """Toggle the visibility of the settings menu."""
         self.settings_menu.toggle()
         self.interacting = False
-
-def pause_simulation(self):
-    if self.settings.get('running'):
-        self.pause_requested = not self.pause_requested
-    self.interacting = False

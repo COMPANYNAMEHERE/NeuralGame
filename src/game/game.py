@@ -1,3 +1,5 @@
+# src/game/game.py
+
 import pygame
 import pymunk
 from pymunk.pygame_util import DrawOptions
@@ -105,7 +107,8 @@ class Game:
             pygame.RESIZABLE
         )
         pygame.display.set_caption("AI Evolution Game")
-        self.gui = GUI(self.settings)
+        # Pass the screen to GUI for SettingsMenu integration
+        self.gui = GUI(self.settings, self.screen)
         self.camera = Camera(self.screen_width, self.screen_height)
 
     def init_state(self):
@@ -191,6 +194,8 @@ class Game:
         )
         self.camera.resize(width, height)
         self.gui.resize(width, height)
+        # Inform SettingsMenu of resize to stop recording if necessary
+        # Assuming SettingsMenu handles this internally via callback
 
     def handle_game_event(self, event):
         """Handle specific game events"""
@@ -426,7 +431,7 @@ class Game:
                     agent.load_model(model_path)
                     agent.reset_position()
                     
-# Reset timers
+                # Reset timers
                 self.iteration_start_time = None
                 self.pause_start_time = None
                 self.accumulated_time = 0
